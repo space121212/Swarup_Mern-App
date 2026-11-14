@@ -1,0 +1,381 @@
+/* Main page */
+
+.members-page {
+    min-height: 100vh;
+    background-color: #f1f5f9;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+/* Main content */
+
+.members-content {
+    flex: 1;
+    min-width: 0;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #fffffe;
+}
+
+/* Page heading */
+
+.members-header {
+    padding: 16px;
+}
+
+.members-header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 4px;
+}
+
+.members-header p {
+    color: #374151;
+    font-size: 16px;
+}
+
+/* Organisation card */
+
+.organisation-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    background-color: #ffffff;
+    padding: 16px;
+    border-radius: 8px;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Organisation heading */
+
+.organisation-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.organisation-icon {
+    height: 32px;
+    width: 32px;
+    color: #000000;
+}
+
+.organisation-heading h5 {
+    flex: 1;
+    font-size: 20px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+/* Organisation select */
+
+.organisation-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    font-size: 15px;
+    outline: none;
+    cursor: pointer;
+}
+
+.organisation-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.organisation-select:disabled {
+    background-color: #f1f5f9;
+    cursor: not-allowed;
+}
+
+/* Existing user card */
+
+.existing-user-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    background-color: white;
+    padding: 15px;
+    border: 1px solid white;
+    border-radius: 10px;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Existing user heading */
+
+.existing-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 5px;
+}
+
+.existing-header p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Input, select and button container */
+
+.existing-user-add {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Input wrapper */
+
+.existing-user-add .input-bar {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Email input */
+
+.existing-user-add .input-user {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 10px;
+    font-size: 16px;
+
+    border: 1px solid gray;
+    border-radius: 10px;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Role select */
+
+.existing-user-add .select-bar {
+    width: 15%;
+    min-width: 100px;
+
+    padding: 10px;
+    font-size: 16px;
+
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+/* Add member button */
+
+.existing-user-add .button {
+    border: 1px solid gray;
+    border-radius: 10px;
+
+    background-color: blue;
+    color: white;
+
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* Responsive layout */
+
+@media (max-width: 650px) {
+
+    .existing-user-add {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .existing-user-add .select-bar {
+        width: 100%;
+    }
+
+}
+
+
+.view-members-card{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 15px;
+    background-color: white;
+    border: 1px solod gray;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+
+}
+
+.view-members-content{
+
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.view-members-heading{
+
+    width: 100%;
+
+
+}
+
+.view-members-button{
+
+    border: 1px solid gray;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    font-weight: 600;
+    
+}
+
+
+.view-members-heading h1{
+
+    font-weight:bolder;
+    font-size: larger;
+}
+
+.view-members-button button{
+
+    display: flex;
+        align-items: center;
+        justify-content: center;
+
+}
+
+.view-members-details{
+
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        
+        
+    
+        background-color: #ffffff;
+        padding: 16px;
+       
+    
+       
+
+
+}
+
+.view-members-information{
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+.view-members-infromation-card{
+
+        display: flex;
+        flex-direction:row;
+        gap: 20px;
+    
+        background-color: #ffffff;
+        padding: 16px;
+        border-radius: 8px;
+    
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+}
+
+.view-memebrs-detail p{
+
+    color: gray;
+   font-size: 16px;
+}
+
+.view-members-name{
+
+    font-weight: bold;
+
+
+}
+
+
+.members-update-delete{
+
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+
+       
+
+
+
+}
+
+
+.members-role-tag{
+
+    border: 1px solid gray;
+        border-radius: 10px;
+        background-color: rgb(198, 217, 238);
+        color: rgb(34, 34, 189);
+        padding: 4px;
+        font-weight: 500;
+        font-size: 14px;
+
+
+}
+
+.member-update-delete-card{
+
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.member-update-delete-card button{
+
+        border: 1px solid gray;
+        border-radius: 10px;
+        background-color: white;
+        color: rgb(198, 15, 15);
+        padding: 8px;
+        font-weight: 600;
+
+
+}
+
+.member-update-delete-card select{
+
+         box-sizing: border-box;
+        padding: 10px 12px;
+    
+        background-color: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+    
+        font-size: 15px;
+        outline: none;
+        cursor: pointer;
+}
