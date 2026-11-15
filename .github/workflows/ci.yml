@@ -100,7 +100,7 @@ jobs:
           ssh -i ~/.ssh/deploy_key \
             -o StrictHostKeyChecking=yes \
             "$EC2_USER@$EC2_HOST" \
-            'cd /opt/workspace &&
+            'cd /opt/workspace/Swarup_Mern-App  &&
              git fetch origin &&
              git reset --hard origin/master &&
              docker compose build &&
