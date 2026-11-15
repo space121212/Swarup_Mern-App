@@ -76,7 +76,7 @@ jobs:
 
   deploy:
     needs: [frontend, backend]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
@@ -102,7 +102,7 @@ jobs:
             "$EC2_USER@$EC2_HOST" \
             'cd /opt/workspace &&
              git fetch origin &&
-             git reset --hard origin/main &&
+             git reset --hard origin/master &&
              docker compose build &&
              docker compose up -d --remove-orphans &&
              docker compose ps &&
