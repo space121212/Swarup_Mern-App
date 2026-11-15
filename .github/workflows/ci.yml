@@ -45,6 +45,13 @@ jobs:
     name: Backend CI
     runs-on: ubuntu-latest
 
+     
+
+    env:
+      TEST_MONGO_DB_URL: ${{ secrets.TEST_MONGO_DB_URL }}
+
+    
+
     defaults:
       run:
         working-directory: backend
