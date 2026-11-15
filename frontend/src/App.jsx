@@ -9,7 +9,7 @@ import TaskDetail from "./pages/TaskDetail";
 
 import ProtectedRoute from "./components/ProtectedRoute"
 
-import { AuthProvider} from "./context/AuthContext"
+import AuthProvider from "./context/AuthProvider";
 
 import {Toaster} from "sonner";
 import './App.css'

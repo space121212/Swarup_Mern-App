@@ -26,44 +26,55 @@ function Projects() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Load the organizations available to the logged-in user.
+  // Load organizations when the component loads.
   useEffect(() => {
+    let ignore = false;
+
     async function loadOrganizations() {
       try {
         const response = await api.get("/organization");
+
+        if (ignore) return;
 
         const memberships = response.data.result || [];
 
         setOrganizations(memberships);
 
         if (memberships.length > 0) {
+          setIsLoadingProjects(true);
+
           setSelectedOrganizationId(
             memberships[0].organizationId._id
           );
         }
       } catch (err) {
-        toast.error(
-          err.response?.data?.message ||
-            "Failed to load organizations."
-        );
+        if (!ignore) {
+          toast.error(
+            err.response?.data?.message ||
+              "Failed to load organizations."
+          );
+        }
       } finally {
-        setIsLoadingOrganizations(false);
+        if (!ignore) {
+          setIsLoadingOrganizations(false);
+        }
       }
     }
 
     loadOrganizations();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  // Load projects whenever the selected organization or page changes.
+  // Load projects whenever the organization or page changes.
   useEffect(() => {
-    if (!selectedOrganizationId) {
-      setProjects([]);
-      setTotalPages(1);
-      return;
-    }
+    if (!selectedOrganizationId) return;
+
+    let ignore = false;
 
     async function loadProjects() {
-      setIsLoadingProjects(true);
       setProjectLoadError("");
 
       try {
@@ -76,29 +87,44 @@ function Projects() {
           }
         );
 
+        if (ignore) return;
+
         if (response.data.success) {
           setProjects(response.data.projects || []);
+
           setTotalPages(
             response.data.pagination?.totalPages || 1
           );
         } else {
           setProjects([]);
+          setTotalPages(1);
           setProjectLoadError("Could not load projects.");
         }
       } catch (err) {
+        if (ignore) return;
+
         setProjects([]);
+        setTotalPages(1);
+
         setProjectLoadError(
           err.response?.data?.message ||
             "Failed to load projects."
         );
       } finally {
-        setIsLoadingProjects(false);
+        if (!ignore) {
+          setIsLoadingProjects(false);
+        }
       }
     }
 
     loadProjects();
+
+    return () => {
+      ignore = true;
+    };
   }, [selectedOrganizationId, currentPage]);
 
+  // Create a project.
   async function handleCreateProject(event) {
     event.preventDefault();
 
@@ -129,19 +155,32 @@ function Projects() {
       setDescription("");
       setIsFormOpen(false);
 
-      // A newly created project may appear on the first page.
-      setCurrentPage(1);
+      setProjectLoadError("");
 
+      // If already on page 1, refresh it directly.
       if (currentPage === 1) {
-        const response = await api.get(
-          `/organisations/${selectedOrganizationId}/projects`,
-          { params: { page: 1 } }
-        );
+        setIsLoadingProjects(true);
 
-        setProjects(response.data.projects || []);
-        setTotalPages(
-          response.data.pagination?.totalPages || 1
-        );
+        try {
+          const response = await api.get(
+            `/organisations/${selectedOrganizationId}/projects`,
+            {
+              params: { page: 1 },
+            }
+          );
+
+          setProjects(response.data.projects || []);
+
+          setTotalPages(
+            response.data.pagination?.totalPages || 1
+          );
+        } finally {
+          setIsLoadingProjects(false);
+        }
+      } else {
+        // Changing the page triggers the projects effect.
+        setIsLoadingProjects(true);
+        setCurrentPage(1);
       }
     } catch (err) {
       toast.error(
@@ -153,12 +192,15 @@ function Projects() {
     }
   }
 
+  // Delete a project.
   async function handleDeleteProject(projectId) {
     const confirmed = window.confirm(
       "Are you sure you want to delete this project?"
     );
 
     if (!confirmed) return;
+
+    setIsLoadingProjects(true);
 
     try {
       await api.delete(
@@ -169,10 +211,13 @@ function Projects() {
 
       const response = await api.get(
         `/organisations/${selectedOrganizationId}/projects`,
-        { params: { page: currentPage } }
+        {
+          params: { page: currentPage },
+        }
       );
 
       const updatedProjects = response.data.projects || [];
+
       const updatedTotalPages =
         response.data.pagination?.totalPages || 1;
 
@@ -182,11 +227,15 @@ function Projects() {
         currentPage > updatedTotalPages
       ) {
         setCurrentPage(updatedTotalPages);
+        // The effect will fetch the previous page.
       } else {
         setProjects(updatedProjects);
         setTotalPages(updatedTotalPages);
+        setIsLoadingProjects(false);
       }
     } catch (err) {
+      setIsLoadingProjects(false);
+
       toast.error(
         err.response?.data?.message ||
           "Failed to delete project."
@@ -194,18 +243,21 @@ function Projects() {
     }
   }
 
+  // Open the edit form.
   function handleEditClick(project) {
     setEditingProjectId(project._id);
     setEditName(project.name);
     setEditDescription(project.description || "");
   }
 
+  // Cancel editing.
   function handleCancelEdit() {
     setEditingProjectId(null);
     setEditName("");
     setEditDescription("");
   }
 
+  // Update a project.
   async function handleUpdateProject(event) {
     event.preventDefault();
 
@@ -241,10 +293,13 @@ function Projects() {
       } else {
         const projectsResponse = await api.get(
           `/organisations/${selectedOrganizationId}/projects`,
-          { params: { page: currentPage } }
+          {
+            params: { page: currentPage },
+          }
         );
 
         setProjects(projectsResponse.data.projects || []);
+
         setTotalPages(
           projectsResponse.data.pagination?.totalPages || 1
         );
@@ -266,12 +321,14 @@ function Projects() {
       <SideBar />
 
       <main className="min-w-0 flex-1 overflow-y-auto p-6 md:p-8">
+
         {/* Page heading */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
               Projects
             </h1>
+
             <p className="mt-2 text-gray-600">
               Create and manage your organization projects.
             </p>
@@ -304,6 +361,11 @@ function Projects() {
               organizations.length === 0
             }
             onChange={(event) => {
+              setIsLoadingProjects(true);
+              setProjectLoadError("");
+              setProjects([]);
+              setTotalPages(1);
+
               setSelectedOrganizationId(event.target.value);
               setCurrentPage(1);
             }}
@@ -403,6 +465,16 @@ function Projects() {
             <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-gray-600">
               Loading projects...
             </div>
+          ) : !selectedOrganizationId ? (
+            <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center">
+              <h3 className="text-lg font-semibold text-gray-800">
+                No organization available
+              </h3>
+
+              <p className="mt-2 text-sm text-gray-500">
+                Join or create an organization to manage projects.
+              </p>
+            </div>
           ) : projectLoadError ? (
             <div className="rounded-2xl border border-red-200 bg-white p-8 text-center">
               <p className="text-red-600">{projectLoadError}</p>
@@ -410,13 +482,16 @@ function Projects() {
               <button
                 type="button"
                 onClick={() => {
-                  // Trigger a reload by updating the page state.
-                  setCurrentPage((page) => page);
+                  setIsLoadingProjects(true);
                   setProjectLoadError("");
+
+                  // Trigger a fresh request.
+                  setCurrentPage((page) => page + 1);
+                  setCurrentPage((page) => page - 1);
                 }}
                 className="mt-3 rounded-lg border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
               >
-                Dismiss error
+                Retry
               </button>
             </div>
           ) : projects.length === 0 ? (
@@ -490,9 +565,7 @@ function Projects() {
                           disabled={isUpdating}
                           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                         >
-                          {isUpdating
-                            ? "Saving..."
-                            : "Save changes"}
+                          {isUpdating ? "Saving..." : "Save changes"}
                         </button>
 
                         <button
@@ -582,9 +655,10 @@ function Projects() {
                   disabled={
                     currentPage === 1 || isLoadingProjects
                   }
-                  onClick={() =>
-                    setCurrentPage((page) => page - 1)
-                  }
+                  onClick={() => {
+                    setIsLoadingProjects(true);
+                    setCurrentPage((page) => page - 1);
+                  }}
                   className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Previous
@@ -600,9 +674,10 @@ function Projects() {
                     currentPage === totalPages ||
                     isLoadingProjects
                   }
-                  onClick={() =>
-                    setCurrentPage((page) => page + 1)
-                  }
+                  onClick={() => {
+                    setIsLoadingProjects(true);
+                    setCurrentPage((page) => page + 1);
+                  }}
                   className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Next

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { CgOrganisation } from "react-icons/cg";
 import { toast } from "sonner";
 
@@ -72,12 +72,15 @@ const Members = () => {
     console.log("Selected organisation:", orgnisationId);
   }, [orgnisationId]);
 
+ 
+
   // STEP 3: Fetch members whenever organisation changes
   useEffect(() => {
     if (!orgnisationId) {
-      setMembers([]);
       return;
     }
+
+    let cancelled = false;
 
     const fetchMembers = async () => {
       setIsLoadingMembers(true);
@@ -93,23 +96,36 @@ const Members = () => {
 
         console.log("MEMBERS API RESPONSE:", response.data);
 
-        setMembers(response.data.memberships || []);
+        if (!cancelled) {
+          setMembers(response.data.memberships || []);
+        }
       } catch (error) {
-        console.error(
-          "Error fetching members:",
-          error.response?.data || error.message,
-        );
+        if (!cancelled) {
+          console.error(
+            "Error fetching members:",
+            error.response?.data || error.message
+          );
 
-        setMembers([]);
+          setMembers([]);
 
-        toast.error(error.response?.data?.message || "Failed to load members");
+          toast.error(
+            error.response?.data?.message || "Failed to load members"
+          );
+        }
       } finally {
-        setIsLoadingMembers(false);
+        if (!cancelled) {
+          setIsLoadingMembers(false);
+        }
       }
     };
 
     fetchMembers();
+
+    return () => {
+      cancelled = true;
+    };
   }, [orgnisationId, refreshMembers]);
+
 
   // STEP 4: Refresh members manually
   const handleRefreshMembers = () => {
@@ -184,10 +200,12 @@ const Members = () => {
       role:newMemberRole
     })
 
-    if(response){
+    if (response) {
+    toast.success("Member added successfully");
 
-      toast.success("Member added successfully")
-    }
+    setNewMemberEmail("");
+    setRefreshMembers((previous) => previous + 1);
+}
       
     
 
@@ -315,10 +333,11 @@ const Members = () => {
           <div className="view-members-information">
             {isLoadingMembers ? (
               <p>Loading Members...</p>
-            ) : Members.length === 0 ? (
-              <p>No Members Found</p>
-            ) : (
-              Members.map((items) => (
+              ) : !orgnisationId || Members.length === 0 ? (
+                  <p>No Members Found</p>
+              ) : (
+                  Members.map((items) => (
+             
                 <div key={items._id} className="view-members-infromation-card">
                   <div className="view-members-details">
                     <p className="view-members-name">{items.userId.name}</p>

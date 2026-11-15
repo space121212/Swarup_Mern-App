@@ -1,6 +1,8 @@
-tailwind.config = {
+/** @type {import('tailwindcss').Config} */
+export default {
   darkMode: 'class',
   theme: {
-    extend: {}
-  }
-}
+    extend: {},
+  },
+  plugins: [],
+};

@@ -10,6 +10,9 @@
     "seed:rbac": "node src/seed.js",
     "migrate:roles": "node src/migrate.js"
   },
+  "jest": {
+    "setupFilesAfterEnv": ["<rootDir>/test/setup.js"]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

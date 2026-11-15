@@ -14,7 +14,6 @@ const taskRoutes=require("./routes/taskRoutes.js")
 const errorHandler=require('./middleware/errorHandler.js')
 const projectRoutes=require("./routes/projectRoute.js")
 const cookieparser=require('cookie-parser');
-const { success } = require('zod');
 
 
 const app=express();
