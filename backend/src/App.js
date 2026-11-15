@@ -20,7 +20,7 @@ const app=express();
 
 
 const allowedOrigins = (
-    process.env.CLIENT_ORIGIN || "http://localhost:6500"
+     "http://localhost:6500" || "http://13.201.190.122"
 )
     .split(",")
     .map((origin) => origin.trim());
