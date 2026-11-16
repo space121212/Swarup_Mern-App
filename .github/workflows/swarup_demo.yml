@@ -17,10 +17,10 @@ jobs:
     steps:
       - name: Printing Runner or Instance variables
         run: | 
-         echo `Hello the workflow event is ${{ github.event_name}} event and ${{github.jobs}}`
+         echo "Hello the workflow event is ${{ github.event_name}} event and ${{github.jobs}}"
          whoami
          echo "Runner Name : $Runner_NAME"
-          echo "Runner OS : $Runner_OS"
+         echo "Runner OS : $Runner_OS"
          echo "Runner temp : $Runner_TEMP"
 
 
