@@ -15,8 +15,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Printing Hello 
-        run: echo `Hello the workflow event is ${{ github.event_name}} event and ${{github.jobs}}`
+      - name: Printing Runner or Instance variables
+        run: | 
+         echo `Hello the workflow event is ${{ github.event_name}} event and ${{github.jobs}}`
+         whoami
+         echo "Runner Name : $Runner.Name"
+          echo "Runner OS : $Runner.Os"
+         echo "Runner temp : $Runner.Temp"
+
+
+
 
 
   
