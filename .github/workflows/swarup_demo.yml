@@ -1,0 +1,25 @@
+name: Swarup Wokflow
+
+
+on: 
+  workflow_dispatch
+
+
+jobs:
+  Print_Hello:
+    name: Swarup CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Printing Hello 
+        run: echo "Hello"
+
+
+  Type_ls:
+    name: ls command
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ls command getting executed
+        run:  whoami
+               ls 
