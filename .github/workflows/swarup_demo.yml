@@ -12,14 +12,8 @@ jobs:
 
     steps:
       - name: Printing Hello 
-        run: echo "Hello"
+        run: echo `Hello the workflow event is ${{ github.event_name}} event and ${{github.jobs}}`
 
 
-  Type_ls:
-    name: ls command
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: ls command getting executed
-        run:  whoami
-               ls 
+ 
+               
