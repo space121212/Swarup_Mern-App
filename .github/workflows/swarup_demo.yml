@@ -2,7 +2,11 @@ name: Swarup Wokflow
 
 
 on: 
-  workflow_dispatch
+  workflow_dispatch:
+  push:
+  pull_request:
+  schedule:
+    - cron: " */5 * * * * "
 
 
 jobs:
