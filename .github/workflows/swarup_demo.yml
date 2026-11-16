@@ -19,9 +19,9 @@ jobs:
         run: | 
          echo `Hello the workflow event is ${{ github.event_name}} event and ${{github.jobs}}`
          whoami
-         echo "Runner Name : $Runner.Name"
-          echo "Runner OS : $Runner.Os"
-         echo "Runner temp : $Runner.Temp"
+         echo "Runner Name : $Runner_NAME"
+          echo "Runner OS : $Runner_OS"
+         echo "Runner temp : $Runner_TEMP"
 
 
 
